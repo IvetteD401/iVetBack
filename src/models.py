@@ -63,7 +63,7 @@ class GeneralRecords(db.Model):
     vet_address = db.Column(db.String(120), unique=False, nullable=False)
     groomer_address = db.Column(db.String(120), unique=False, nullable=False)
     insurance_policy = db.Column(db.String(120), unique=True, nullable=False)
-    insurance_provider = db.Column(db.Integer, unique=False, nullable=False)
+    insurance_provider = db.Column(db.String(80), unique=False, nullable=False)
     petname = db.Column(db.String(80), unique=False, nullable=False)
 
 

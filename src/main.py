@@ -117,6 +117,44 @@ def get_dogfile():
 
     return "Invalid Method", 404
 
+@app.route('/records', methods=['POST', 'GET'])
+def get_records():
+
+#Create a records and retrieve all recordss!!
+
+    if request.method == 'POST':
+        body = request.get_json()
+
+        if body is None:
+            raise APIException("You need to specify the request body as a json object", status_code=400)
+        if "vet_name" not in body:
+            raise APIException('You need to specify the vet name', status_code=400)
+        if "groomer_name" not in body:
+            raise APIException('You need to specify the groomer name', status_code=400)
+        if 'petname' not in body:
+            raise APIException('You need to specify the petname', status_code=400)
+        if 'insurance_provider' not in body:
+            body['insurance_provider'] = None
+        if 'insurance_policy' not in body:
+            body['insurance_policy'] = None
+        if 'vet_address' not in body:
+            body['vet_address'] = None
+        if 'groomer_address' not in body:
+            body['groomer_address'] = None
+
+        record = GeneralRecords(vet_name=body['vet_name'], groomer_name=body['groomer_name'], vet_address=body['vet_address'], groomer_address=body['groomer_address'],insurance_policy = body['insurance_policy'], insurance_provider = body['insurance_provider'], petname = body['petname'])
+        db.session.add(record)
+        db.session.commit()
+
+        return "ok", 200
+    
+    # GET request
+    if request.method == 'GET':
+        all_records = GeneralRecords.query.all()
+        all_records = list(map(lambda x: x.serialize(), all_records))
+        return jsonify(all_records), 200
+
+    return "Invalid Method", 404
 
 
 
