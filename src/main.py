@@ -34,25 +34,33 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST' , 'GET'])
 def login():
     
     if request.method == 'POST':
         body = request.get_json()
         user = User.query.filter_by(email=body['email'], password=body['password']).first()
 
-    if not user:
-        return 'User not found', 404
-    if not user.email:
-        return jsonify({"msg": "Missing email parameter"}), 400
-    if not user.password:
-        return jsonify({"msg": "Missing password parameter"}), 400
-    return jsonify({
-              'token': create_jwt(identity=1),
-              'id': user.id,
-              'email': user.email,
-              'firstName': user.firstName
+        if not user:
+            return 'User not found', 404
+        if not user.email:
+            return jsonify({"msg": "Missing email parameter"}), 400
+        if not user.password:
+            return jsonify({"msg": "Missing password parameter"}), 400
+        return jsonify({
+                'token': create_jwt(identity=1),
+                'id': user.id,
+                'email': user.email,
+                'firstName': user.firstName
               })
+     # GET request
+    if request.method == 'GET':
+        all_users = User.query.all()
+        all_users = list(map(lambda x: x.serialize(), all_users))
+        return jsonify(all_users), 200
+
+    return "Invalid Method", 404
+   
 
 @app.route('/new', methods=['POST'])
 def new_user():
@@ -72,14 +80,19 @@ def new_user():
             'msg': 'User Added!'
         })
 
-    # # GET request
-    # if request.method == 'GET':
-    #     all_users = User.query.all()
-    #     all_users = list(map(lambda x: x.serialize(), all_users))
-    #     return jsonify(all_users), 200
+@app.route('/delete', methods=['DELETE'])
+def delete_user():
+       # DELETE request
+    if request.method == 'DELETE':
+        user = User.query.get(user_id)
+        if user is None:
+            raise APIException('User not found', status_code=404)
+        db.session.delete(user)
+        db.session.commit()
+        return "ok", 200
 
-    # return "Invalid Method", 404
-
+    return "Invalid Method", 404
+   
 # Protect a view with jwt_required, which requires a valid jwt
 # to be present in the headers.
 # @app.route('/protected', methods=['GET'])
@@ -88,7 +101,7 @@ def new_user():
 #     # Access the identity of the current user with get_jwt_identity
 #     return jsonify({'hello_from': get_jwt_identity()}), 200
 
-@app.route('/dogfile', methods=['POST', 'GET'])
+@app.route('/dogfile', methods=['POST', 'GET', 'DELETE'])
 def get_dogfile():
 
     if request.method == 'POST':
@@ -116,11 +129,22 @@ def get_dogfile():
         return jsonify(all_dogs), 200
 
     return "Invalid Method", 404
+       
+       # DELETE request
+    if request.method == 'DELETE':
+        dog = Dogfile.query.get(DogFile_id)
+        if record is None:
+            raise APIException('Dogfile not found', status_code=404)
+        db.session.delete(dog)
+        db.session.commit()
+        return "ok", 200
 
-@app.route('/records', methods=['POST', 'GET'])
+    return "Invalid Method", 404
+
+@app.route('/records', methods=['POST', 'DELETE','GET'])
 def get_records():
 
-#Create a records and retrieve all recordss!!
+#Create a record and retrieve all records!!
 
     if request.method == 'POST':
         body = request.get_json()
@@ -156,6 +180,16 @@ def get_records():
 
     return "Invalid Method", 404
 
+       # DELETE request
+    if request.method == 'DELETE':
+        record = GeneralRecords.query.get(GeneralRecords_id)
+        if record is None:
+            raise APIException('Record not found', status_code=404)
+        db.session.delete(record)
+        db.session.commit()
+        return "ok", 200
+
+    return "Invalid Method", 404
 
 
 @app.route('/hello', methods=['POST', 'GET'])
