@@ -84,7 +84,7 @@ def new_user():
 def delete_user():
        # DELETE request
     if request.method == 'DELETE':
-        user = User.query.get(user_id)
+        user = User.query.get(user.id)
         if user is None:
             raise APIException('User not found', status_code=404)
         db.session.delete(user)
@@ -132,8 +132,8 @@ def get_dogfile():
        
        # DELETE request
     if request.method == 'DELETE':
-        dog = Dogfile.query.get(DogFile_id)
-        if record is None:
+        dog = Dogfile.query.get(Dogfile.id)
+        if dog is None:
             raise APIException('Dogfile not found', status_code=404)
         db.session.delete(dog)
         db.session.commit()
@@ -157,6 +157,10 @@ def get_records():
             raise APIException('You need to specify the groomer name', status_code=400)
         if 'petname' not in body:
             raise APIException('You need to specify the petname', status_code=400)
+        if 'caregiver' not in body:
+            raise APIException('You need to specify the caregiver', status_code=400)
+        if 'likes' not in body:
+            raise APIException('You need to specify the likes', status_code=400)
         if 'insurance_provider' not in body:
             body['insurance_provider'] = None
         if 'insurance_policy' not in body:
@@ -166,7 +170,7 @@ def get_records():
         if 'groomer_address' not in body:
             body['groomer_address'] = None
 
-        record = GeneralRecords(vet_name=body['vet_name'], groomer_name=body['groomer_name'], vet_address=body['vet_address'], groomer_address=body['groomer_address'],insurance_policy = body['insurance_policy'], insurance_provider = body['insurance_provider'], petname = body['petname'])
+        record = GeneralRecords(vet_name=body['vet_name'], caregiver=body['caregiver'], likes=body['likes'], groomer_name=body['groomer_name'], vet_address=body['vet_address'], groomer_address=body['groomer_address'],insurance_policy = body['insurance_policy'], insurance_provider = body['insurance_provider'], petname = body['petname'])
         db.session.add(record)
         db.session.commit()
 
@@ -182,7 +186,7 @@ def get_records():
 
        # DELETE request
     if request.method == 'DELETE':
-        record = GeneralRecords.query.get(GeneralRecords_id)
+        record = GeneralRecords.query.get(GeneralRecords.id)
         if record is None:
             raise APIException('Record not found', status_code=404)
         db.session.delete(record)

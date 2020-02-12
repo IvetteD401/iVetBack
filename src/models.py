@@ -65,6 +65,8 @@ class GeneralRecords(db.Model):
     insurance_policy = db.Column(db.String(120), unique=True, nullable=False)
     insurance_provider = db.Column(db.String(80), unique=False, nullable=False)
     petname = db.Column(db.String(80), unique=False, nullable=False)
+    caregiver = db.Column(db.String(100), unique=False, nullable=False)
+    likes = db.Column(db.String(300), unique=False, nullable=False)
 
 
     def __repr__(self):
