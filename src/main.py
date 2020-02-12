@@ -161,16 +161,17 @@ def get_records():
             raise APIException('You need to specify the caregiver', status_code=400)
         if 'likes' not in body:
             raise APIException('You need to specify the likes', status_code=400)
-        if 'insurance_provider' not in body:
-            body['insurance_provider'] = None
-        if 'insurance_policy' not in body:
-            body['insurance_policy'] = None
-        if 'vet_address' not in body:
-            body['vet_address'] = None
-        if 'groomer_address' not in body:
-            body['groomer_address'] = None
+        # if 'insurance_provider' not in body:
+        #     body['insurance_provider'] = None
+        # if 'insurance_policy' not in body:
+        #     body['insurance_policy'] = None
+        # if 'vet_address' not in body:
+        #     body['vet_address'] = None
+        # if 'groomer_address' not in body:
+        #     body['groomer_address'] = None
 
-        record = GeneralRecords(vet_name=body['vet_name'], caregiver=body['caregiver'], likes=body['likes'], groomer_name=body['groomer_name'], vet_address=body['vet_address'], groomer_address=body['groomer_address'],insurance_policy = body['insurance_policy'], insurance_provider = body['insurance_provider'], petname = body['petname'])
+# vet_address=body['vet_address'], groomer_address=body['groomer_address'],insurance_policy = body['insurance_policy'], insurance_provider = body['insurance_provider'],
+        record = GeneralRecords(vet_name=body['vet_name'], caregiver=body['caregiver'], likes=body['likes'], groomer_name=body['groomer_name'], petname = body['petname'])
         db.session.add(record)
         db.session.commit()
 

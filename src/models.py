@@ -60,10 +60,10 @@ class GeneralRecords(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vet_name = db.Column(db.String(80), unique=False, nullable=False)
     groomer_name = db.Column(db.String(80), unique=False, nullable=False)
-    vet_address = db.Column(db.String(120), unique=False, nullable=False)
-    groomer_address = db.Column(db.String(120), unique=False, nullable=False)
-    insurance_policy = db.Column(db.String(120), unique=True, nullable=False)
-    insurance_provider = db.Column(db.String(80), unique=False, nullable=False)
+    # vet_address = db.Column(db.String(120), unique=False, nullable=False)
+    # groomer_address = db.Column(db.String(120), unique=False, nullable=False)
+    # insurance_policy = db.Column(db.String(120), unique=True, nullable=False)
+    # insurance_provider = db.Column(db.String(80), unique=False, nullable=False)
     petname = db.Column(db.String(80), unique=False, nullable=False)
     caregiver = db.Column(db.String(100), unique=False, nullable=False)
     likes = db.Column(db.String(300), unique=False, nullable=False)
@@ -76,9 +76,11 @@ class GeneralRecords(db.Model):
         return {
             "vet_name": self.vet_name,
             "groomer_name": self.groomer_name,
-            "vet_address": self.vet_address,
-            "groomer_address": self.groomer_address,
-            "insurance_policy": self.insurance_policy,
-            "insurance_provider": self.insurance_provider,
+            # "vet_address": self.vet_address,
+            # "groomer_address": self.groomer_address,
+            # "insurance_policy": self.insurance_policy,
+            # "insurance_provider": self.insurance_provider,
             "petname": self.petname,
+            "caregiver": self.caregiver,
+            "likes": self.likes
     }
